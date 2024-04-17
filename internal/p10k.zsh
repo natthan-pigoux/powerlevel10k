@@ -7477,6 +7477,8 @@ _p9k_init_params() {
       'gitea.com|gitea.io'             VCS_GIT_GITEA_ICON
       'github.com'                     VCS_GIT_GITHUB_ICON
       'gitlab.com'                     VCS_GIT_GITLAB_ICON
+      'gitlab.in2p3.fr'                VCS_GIT_GITLAB_ICON
+      'gitlab.cta-observatory.org'     VCS_GIT_GITLAB_ICON
       'gnome.org'                      VCS_GIT_GNOME_ICON
       'gnu.org'                        VCS_GIT_GNU_ICON
       'kde.org'                        VCS_GIT_KDE_ICON
