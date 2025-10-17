@@ -1127,7 +1127,7 @@ function _p9k_python_version() {
 ################################################################
 ################################################################
 # Python Environment
-prompt_python_env_mngr() {
+prompt_pixi_conda() {
   local shown=0
 
   # Show Pixi first (if active)
