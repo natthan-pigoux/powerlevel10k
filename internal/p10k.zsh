@@ -1128,6 +1128,12 @@ function _p9k_python_version() {
 ################################################################
 # Python Environment
 prompt_pixi_conda() {
+  # If CONDA_PREFIX contains ".pixi", that means it's a Pixi-managed conda env.
+  if [[ "$CONDA_PREFIX" == *".pixi"* ]]; then
+    prompt_pixi && return 0
+    return 1
+  fi
+
   local shown=0
 
   # Show Pixi first (if active)
@@ -1176,7 +1182,7 @@ prompt_pixi() {
     env_name="$PIXI_ENVIRONMENT_NAME"
   # Priority 2: detect a .pixi directory in the current project
   elif [[ -d ".pixi" ]]; then
-    env_name=$(basename "$(pwd)")
+    env_name="default"
   else
     return 1  # Not in Pixi environment
   fi
