@@ -1178,11 +1178,18 @@ prompt_pixi() {
 
   # --- Detect Pixi environment ---
   # Priority 1: environment variable from activation
+  project_name=$(pixi info --json | jq -r .project_info.name)
+  if [[ -n "$project_name" ]]; then
+    project_name="$project_name:"
+  else
+    project_name=""
+  fi
   if [[ -n "$PIXI_ENVIRONMENT_NAME" ]]; then
-    env_name="$PIXI_ENVIRONMENT_NAME"
+    env_name="$project_name$PIXI_ENVIRONMENT_NAME"
   # Priority 2: detect a .pixi directory in the current project
   elif [[ -d ".pixi" ]]; then
-    env_name="default"
+    default="default"
+    env_name="$project_name$default"
   else
     return 1  # Not in Pixi environment
   fi
