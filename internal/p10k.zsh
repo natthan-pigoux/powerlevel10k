@@ -1125,6 +1125,23 @@ function _p9k_python_version() {
 ################################################################
 # Prompt Segment Definitions
 ################################################################
+################################################################
+# Python Environment
+prompt_python_env_mngr() {
+  local shown=0
+
+  # Show Pixi first (if active)
+  if prompt_pixi; then
+    shown=1
+  fi
+
+  # Then show Conda (if active)
+  if prompt_anaconda; then
+    shown=1
+  fi
+
+  (( shown )) || return 1
+}
 
 ################################################################
 # Anaconda Environment
@@ -1145,6 +1162,34 @@ prompt_anaconda() {
 
 _p9k_prompt_anaconda_init() {
   typeset -g "_p9k__segment_cond_${_p9k__prompt_side}[_p9k__segment_index]"='${CONDA_PREFIX:-$CONDA_ENV_PATH}'
+}
+
+#################################################################
+# Pixi Environment
+prompt_pixi() {
+  local msg
+  local env_name
+
+  # --- Detect Pixi environment ---
+  # Priority 1: environment variable from activation
+  if [[ -n "$PIXI_ENVIRONMENT_NAME" ]]; then
+    env_name="$PIXI_ENVIRONMENT_NAME"
+  # Priority 2: detect a .pixi directory in the current project
+  elif [[ -d ".pixi" ]]; then
+    env_name=$(basename "$(pwd)")
+  else
+    return 1  # Not in Pixi environment
+  fi
+
+  # --- Build the prompt message ---
+  msg="$_POWERLEVEL9K_ANACONDA_LEFT_DELIMITER${env_name//\%/%%}$_POWERLEVEL9K_ANACONDA_RIGHT_DELIMITER"
+
+  # --- Display with same styling as Anaconda ---
+  _p9k_prompt_segment "$0" "cyan" "$_p9k_color1" 'PYTHON_ICON' 0 '' "$msg"
+}
+
+_p9k_prompt_pixi_init() {
+  typeset -g "_p9k__segment_cond_${_p9k__prompt_side}[_p9k__segment_index]"='${PIXI_ENVIRONMENT_NAME:-$([ -d .pixi ] && echo 1)}'
 }
 
 # Populates array `reply` with "$#profile:$profile:$region" where $profile and $region
