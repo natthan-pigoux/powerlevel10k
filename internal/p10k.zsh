@@ -1135,7 +1135,7 @@ prompt_pixi_conda() {
   fi
 
   local shown=0
-
+  
   # Show Pixi first (if active)
   if prompt_pixi; then
     shown=1
@@ -1179,7 +1179,7 @@ prompt_pixi() {
   # --- Detect Pixi environment ---
   # Priority 1: environment variable from activation
   project_name=$(pixi info --json | jq -r .project_info.name)
-  if [[ -n "$project_name" ]]; then
+  if [[ -n "$project_name" && "$project_name" != "null" ]]; then
     project_name="$project_name:"
   else
     project_name=""
@@ -1195,7 +1195,7 @@ prompt_pixi() {
   fi
 
   # --- Build the prompt message ---
-  msg="$_POWERLEVEL9K_ANACONDA_LEFT_DELIMITER${env_name//\%/%%}$_POWERLEVEL9K_ANACONDA_RIGHT_DELIMITER"
+  msg="${env_name//\%/%%}"
 
   # --- Display with same styling as Anaconda ---
   _p9k_prompt_segment "$0" "cyan" "$_p9k_color1" 'PYTHON_ICON' 0 '' "$msg"
@@ -1205,6 +1205,15 @@ _p9k_prompt_pixi_init() {
   typeset -g "_p9k__segment_cond_${_p9k__prompt_side}[_p9k__segment_index]"='${PIXI_ENVIRONMENT_NAME:-$([ -d .pixi ] && echo 1)}'
 }
 
+prompt_weather() {
+  local meteo
+  meteo="$(cat ~/.prompt_weather)"
+  _p9k_prompt_segment "$0" "cyan" "$_p9k_color1" '' 0 '' "$meteo"
+}
+
+_p9k_prompt_weather_init() {
+  typeset -g "_p9k__segment_cond_${_p9k__prompt_side}[_p9k__segment_index]"=''
+}
 # Populates array `reply` with "$#profile:$profile:$region" where $profile and $region
 # come from the AWS config (~/.aws/config).
 function _p9k_parse_aws_config() {
